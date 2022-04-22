@@ -15,16 +15,16 @@ public class Test {
     private static final int SIZE_CACHE_MAS = 5;
 
     // Диапазон случайных чисел
-    private static final int RANGE = 100;
+    private static final double RANGE = Math.pow(2,63) - 1;
 
     public static void main(String[] args) {
 
         // Создаем массив случайных чисел
         Random random = new Random();
-        int[] array = new int[COUNT_ELEMENTS_MAS];
+        long[] array = new long[COUNT_ELEMENTS_MAS];
         for (int i = 0; i < array.length; i++) {
             // Нуля в нашем массиве не предполагается
-            array[i] = random.nextInt(RANGE) + 1;
+            array[i] = (long)random.nextDouble(RANGE) + 1;
             System.out.println(array[i]);
         }
 
@@ -35,7 +35,7 @@ public class Test {
                     String.valueOf(COUNT_ELEMENTS_MAS),
                     "\n"));
 
-            for (int num : array) {
+            for (long num : array) {
                 writer.append(String.valueOf(num)).append("\n");
             }
         } catch (IOException e) {
@@ -49,7 +49,11 @@ public class Test {
         main.main(new String[]{});
 
         long finish = System.currentTimeMillis();
-        long elapsed = finish - start;
-        System.out.println("Прошло времени, мс: " + elapsed);
+        double elapsed = (finish - start) / 1000D;
+        System.out.println("Прошло времени, с: " + elapsed);
+
+        // Смотрим сколько памяти съедает наша программа
+        double usedBytes = (Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory()) / 1_048_576D;
+        System.out.println("Использовано памяти, Мб: " + usedBytes);
     }
 }

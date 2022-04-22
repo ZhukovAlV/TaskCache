@@ -17,15 +17,15 @@ public class Main {
     // Количество запросов в файле
     private static int countQueriesFromInputFile;
     // Массив запросов
-    private static int[] queriesMas;
+    private static long[] queriesMas;
 
     // Объем кеш
     private static int countCacheQuery;
     // Массив кеш
-    private static int[] casheMas;
+    private static long[] casheMas;
 
     // Map запроса с максимальным номером строки (в файле input.txt)
-    private static Map<Integer, Integer> mapQuery = new HashMap<>();
+    private static Map<Long, Integer> mapQuery = new HashMap<>();
 
     public static void main(String[] args) {
 
@@ -40,14 +40,14 @@ public class Main {
             readFirstLineFromInput(line);
 
             // Создаем массивы
-            queriesMas = new int[countQueriesFromInputFile];
-            casheMas = new int[countCacheQuery];
+            queriesMas = new long[countQueriesFromInputFile];
+            casheMas = new long[countCacheQuery];
 
             int i = 0;
             line = reader.readLine();
             while (line != null) {
-                // Добавляем элемент в массив
-                int num = Integer.parseInt(line);
+                // Добавляем запрос в массив
+                long num = Long.parseLong(line);
                 queriesMas[i] = num;
 
                 // Также добавляем его в map
@@ -66,13 +66,13 @@ public class Main {
         // Обрабатываем по порядку поступающие запросы
         for (int i = 0; i < queriesMas.length; i++) {
 
-            // Добавляем элемент в массив кеша, если там элемента нет
+            // Добавляем запрос в массив кеша, если там данного запроса нет
             if (!checkQueryInCache(casheMas, queriesMas[i])) {
                 if (casheMas.length > casheMasIter) {
                     casheMas[casheMasIter] = queriesMas[i];
                     casheMasIter++;
                 } else {
-                    // Очищаем из кеш неиспользуемый запрос и пробуем добавить наш новый запрос
+                    // Удаляем из кеш неиспользуемый запроса и пробуем добавить новый
                       optimizeQueryMas(i);
                 }
                 // Отмечаем очередное обращение в распределенную систему
@@ -86,7 +86,6 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     /**
@@ -100,13 +99,13 @@ public class Main {
     }
 
     /**
-     * Проверяем наличие элемента в массиве кеш
+     * Проверяем наличие запроса в массиве кеш
      * @param casheMas Массив кеш
-     * @param element Элемент, который проверяем
-     * @return True если элемент имеется в массиве
+     * @param element Запрос, который проверяем
+     * @return True если запрос имеется в массиве
      */
-    public static boolean checkQueryInCache(int[] casheMas, int element) {
-        for (int num : casheMas) {
+    public static boolean checkQueryInCache(long[] casheMas, long element) {
+        for (long num : casheMas) {
             if (num == element) return true;
         }
         return false;
@@ -114,7 +113,7 @@ public class Main {
 
     /**
      * Оптимизируем массив кеша, удаляем неиспользуемый запрос и добавляем новый
-     * @param currentNum текущий номер, который считывается из массива запросов
+     * @param currentNum Текущий номер, который считывается из массива запросов
      */
     public static void optimizeQueryMas(int currentNum) {
         for (int i = 0; i < casheMas.length; i++) {
