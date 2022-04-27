@@ -29,11 +29,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        try {
-            // Создаем объект FileReader для объекта File
-            FileReader fr = new FileReader(FILE_INPUT);
-            // Создаем BufferedReader с существующего FileReader для построчного считывания
-            BufferedReader reader = new BufferedReader(fr);
+        try (FileReader fr = new FileReader(FILE_INPUT);
+        BufferedReader reader = new BufferedReader(fr)){
 
             // Считаем сначала первую строку
             String line = reader.readLine();
