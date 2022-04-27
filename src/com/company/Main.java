@@ -1,5 +1,7 @@
 package com.company;
 
+import com.company.exception.LengthMasException;
+
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +27,7 @@ public class Main {
     private static long[] casheMas;
 
     // Map запроса с максимальным номером строки (в файле input.txt)
-    private static Map<Long, Integer> mapQuery = new HashMap<>();
+    private static final Map<Long, Integer> MAP_QUERY = new HashMap<>();
 
     public static void main(String[] args) {
 
@@ -43,19 +45,19 @@ public class Main {
             int i = 0;
             line = reader.readLine();
             while (line != null) {
-                // Добавляем запрос в массив
+                // Проверяем что число и добавляем в массив
                 long num = Long.parseLong(line);
                 queriesMas[i] = num;
 
                 // Также добавляем его в map
-                mapQuery.put(num,i);
+                MAP_QUERY.put(num,i);
 
                 // Считываем остальные строки в цикле
                 line = reader.readLine();
 
                 i++;
             }
-        } catch (IOException e) {
+        } catch (IOException | LengthMasException | NumberFormatException e) {
             e.printStackTrace();
         }
 
@@ -89,8 +91,11 @@ public class Main {
      * Получаем информацию по объему кеш и количеству запросов
      * @param str Первая строка из файла input.txt
      */
-    public static void readFirstLineFromInput(String str) {
+    public static void readFirstLineFromInput(String str) throws LengthMasException {
         String[] firstLine = str.split(" ");
+
+        if (firstLine.length != 2) throw new LengthMasException();
+
         countCacheQuery = Integer.parseInt(firstLine[0]);
         countQueriesFromInputFile = Integer.parseInt(firstLine[1]);
     }
@@ -114,7 +119,7 @@ public class Main {
      */
     public static void optimizeQueryMas(int currentNum) {
         for (int i = 0; i < casheMas.length; i++) {
-            if (mapQuery.get(casheMas[i]) <= currentNum) {
+            if (MAP_QUERY.get(casheMas[i]) <= currentNum) {
                 casheMas[i] = queriesMas[currentNum];
             }
         }
