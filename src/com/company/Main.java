@@ -118,7 +118,7 @@ public class Main {
     public static void optimizeQueryMas(int currentNum) {
         for (int i = 0; i < casheMas.length; i++) {
             if (mapQuery.get(casheMas[i]) <= currentNum) {
-                casheMas[i] = queriesMas[i];
+                casheMas[i] = queriesMas[currentNum];
             }
         }
     }
